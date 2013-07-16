@@ -1,0 +1,18 @@
+{
+"aws": {
+  "login": {
+    "access_key": "...",
+    "secret_key": "..."
+  },
+  "s3": {
+    "bucket": "codex"
+  },
+  "iam": {
+    "groupname": "codex-mirrors",
+    "username": "..."
+  }
+},
+"database": {
+  "filename": ".../database"
+}
+}

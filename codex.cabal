@@ -12,6 +12,10 @@ Build-Type: Simple
 Synopsis: A new package repository for Haskell
 
 Executable codex
-  HS-Source-Dir: Haskell
+  HS-Source-Dirs: Haskell
   Main-Is: Codex.hs
-  Build-Depends: base >= 4.6 && <= 5
+  Build-Depends: aeson >= 0.6.1.0 && < 1,
+                 base >= 4.5 && <= 5,
+                 bytestring >= 0.9.2.1 && < 1,
+                 text >= 0.11.3.1 && < 1
+
