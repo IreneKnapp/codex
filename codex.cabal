@@ -1,0 +1,17 @@
+Name: codex
+Version: 0.1
+Cabal-Version: >= 1.8
+Homepage: http://ireneknapp.com/
+License: BSD3
+License-File: LICENSE
+Author: Irene Knapp
+Maintainer: irene.knapp@icloud.com
+Copyright: Copyright 2013 Irene Knapp.
+Category: Distribution
+Build-Type: Simple
+Synopsis: A new package repository for Haskell
+
+Executable codex
+  HS-Source-Dir: Haskell
+  Main-Is: Codex.hs
+  Build-Depends: base >= 4.6 && <= 5
