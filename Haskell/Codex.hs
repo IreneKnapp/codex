@@ -6,6 +6,9 @@ import qualified Data.ByteString.Lazy as LBS
 import qualified Data.Text as Text
 import qualified Data.Text.Encoding as Text
 import qualified Data.Text.IO as Text
+import qualified Network.HTTP.Types as HTTP
+import qualified Network.Wai as HTTP
+import qualified Network.Wai.Handler.Warp as HTTP
 import qualified System.Environment as System
 import qualified System.Exit as System
 import qualified System.IO as System
@@ -18,12 +21,14 @@ import Data.Monoid
 data Configuration =
   Configuration {
       configurationAWS :: AWSConfiguration,
-      configurationDatabase :: DatabaseConfiguration
+      configurationDatabase :: DatabaseConfiguration,
+      configurationWeb :: WebConfiguration
     }
 instance JSON.FromJSON Configuration where
   parseJSON (JSON.Object v) =
     Configuration <$> v JSON..: "aws"
                   <*> v JSON..: "database"
+                  <*> v JSON..: "web"
   parseJSON _ = mzero
 
 
@@ -85,6 +90,16 @@ instance JSON.FromJSON DatabaseConfiguration where
   parseJSON _ = mzero
 
 
+data WebConfiguration =
+  WebConfiguration {
+      webConfigurationPort :: Int
+    }
+instance JSON.FromJSON WebConfiguration where
+  parseJSON (JSON.Object v) =
+    WebConfiguration <$> v JSON..: "port"
+  parseJSON _ = mzero
+
+
 main :: IO ()
 main = do
   arguments <- System.getArgs
@@ -97,8 +112,15 @@ main = do
           putStrLn $ "Invalid configuration: " ++ message
           System.exitFailure
         Right configuration -> do
-          putStrLn $ Text.unpack $ databaseConfigurationFilename $ configurationDatabase configuration
+          let port = webConfigurationPort $ configurationWeb configuration
+          HTTP.run port application
     _ -> do
       putStrLn "Usage: codex config.json"
       System.exitFailure
+
+
+application :: HTTP.Application
+application request = do
+  return $ HTTP.ResponseSource HTTP.status200 [] $ do
+    putStrLn "Hmm..."
 
